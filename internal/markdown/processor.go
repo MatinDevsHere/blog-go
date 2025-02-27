@@ -10,6 +10,11 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
+var (
+	KindProfanity = ast.NewNodeKind("Profanity")
+	KindTooltip   = ast.NewNodeKind("Tooltip")
+)
+
 type ProfanityExtension struct{}
 
 func (e *ProfanityExtension) Extend(m goldmark.Markdown) {
@@ -29,36 +34,46 @@ type ProfanityNode struct {
 
 // Kind returns the kind of the node
 func (n *ProfanityNode) Kind() ast.NodeKind {
-	return ast.KindInline
+	return KindProfanity
 }
 
-// Type returns profanity type
-func (n *ProfanityNode) Type() ast.NodeType {
-	return ast.NodeInline
-}
-
+// Dump dumps the node to string
 func (n *ProfanityNode) Dump(source []byte, level int) {
-	ast.DumpHelper(n, source, level, nil, nil)
+	m := map[string]string{
+		"Explicit": n.Explicit,
+		"Safe":     n.Safe,
+	}
+	ast.DumpHelper(n, source, level, m, nil)
 }
 
 type TooltipNode struct {
 	ast.BaseInline
-	Text    string
-	Tooltip string
+	text    string
+	tooltip string
 }
 
 // Kind returns the kind of the node
 func (n *TooltipNode) Kind() ast.NodeKind {
-	return ast.KindInline
+	return KindTooltip
 }
 
-// Type returns tooltip type
-func (n *TooltipNode) Type() ast.NodeType {
-	return ast.NodeInline
+// Text returns the tooltip text
+func (n *TooltipNode) Text() string {
+	return n.text
 }
 
+// Tooltip returns the tooltip content
+func (n *TooltipNode) Tooltip() string {
+	return n.tooltip
+}
+
+// Dump dumps the node to string
 func (n *TooltipNode) Dump(source []byte, level int) {
-	ast.DumpHelper(n, source, level, nil, nil)
+	m := map[string]string{
+		"Text":    n.text,
+		"Tooltip": n.tooltip,
+	}
+	ast.DumpHelper(n, source, level, m, nil)
 }
 
 func NewProfanityParser() parser.InlineParser {
@@ -107,8 +122,8 @@ func (p *tooltipParser) Parse(parent ast.Node, block text.Reader, pc parser.Cont
 	// TODO: Implement tooltip parsing logic
 
 	node := &TooltipNode{
-		Text:    "placeholder",
-		Tooltip: "tooltip text",
+		text:    "placeholder",
+		tooltip: "tooltip text",
 	}
 
 	return node
