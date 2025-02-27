@@ -16,9 +16,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Copy static assets
-	if err := copyDir("static", "dist/static"); err != nil {
-		log.Fatal(err)
+	// Copy static assets only if the directory exists
+	if _, err := os.Stat("static"); !os.IsNotExist(err) {
+		if err := copyDir("static", "dist/static"); err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	// Process markdown files
