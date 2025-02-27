@@ -2,10 +2,10 @@ package markdown
 
 import (
 	"bytes"
+
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/parser"
-	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/text"
 	"github.com/yuin/goldmark/util"
 )
@@ -27,10 +27,38 @@ type ProfanityNode struct {
 	Safe     string
 }
 
+// Kind returns the kind of the node
+func (n *ProfanityNode) Kind() ast.NodeKind {
+	return ast.KindInline
+}
+
+// Type returns profanity type
+func (n *ProfanityNode) Type() ast.NodeType {
+	return ast.NodeInline
+}
+
+func (n *ProfanityNode) Dump(source []byte, level int) {
+	ast.DumpHelper(n, source, level, nil, nil)
+}
+
 type TooltipNode struct {
 	ast.BaseInline
 	Text    string
 	Tooltip string
+}
+
+// Kind returns the kind of the node
+func (n *TooltipNode) Kind() ast.NodeKind {
+	return ast.KindInline
+}
+
+// Type returns tooltip type
+func (n *TooltipNode) Type() ast.NodeType {
+	return ast.NodeInline
+}
+
+func (n *TooltipNode) Dump(source []byte, level int) {
+	ast.DumpHelper(n, source, level, nil, nil)
 }
 
 func NewProfanityParser() parser.InlineParser {
