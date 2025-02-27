@@ -57,8 +57,13 @@ func (n *TooltipNode) Kind() ast.NodeKind {
 	return KindTooltip
 }
 
-// Text returns the tooltip text
-func (n *TooltipNode) Text() string {
+// Text implements ast.Node.Text
+func (n *TooltipNode) Text(source []byte) []byte {
+	return []byte(n.text)
+}
+
+// GetText returns the tooltip text as string
+func (n *TooltipNode) GetText() string {
 	return n.text
 }
 
