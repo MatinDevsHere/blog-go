@@ -1,0 +1,56 @@
+package templates
+
+templ Layout(title string) {
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ title }</title>
+			<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+			<script src="https://giscus.app/client.js" data-repo="[YOUR-USERNAME]/[YOUR-REPO]" data-repo-id="[YOUR-REPO-ID]" data-category="Comments" data-category-id="[CATEGORY-ID]" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" async>
+			</script>
+			<style>
+				.tooltip {
+					position: relative;
+					display: inline-block;
+					border-bottom: 1px dotted black;
+				}
+				.tooltip .tooltip-text {
+					visibility: hidden;
+					background-color: black;
+					color: #fff;
+					text-align: center;
+					border-radius: 6px;
+					padding: 5px;
+					position: absolute;
+					z-index: 1;
+					bottom: 125%;
+					left: 50%;
+					transform: translateX(-50%);
+				}
+				.tooltip:hover .tooltip-text {
+					visibility: visible;
+				}
+				.profanity-hidden {
+					display: none;
+				}
+			</style>
+		</head>
+		<body x-data="{ showProfanity: false }">
+			<header>
+				<nav>
+					<label>
+						<input type="checkbox" x-model="showProfanity"/>
+						Show Explicit Content
+					</label>
+				</nav>
+			</header>
+			<main>
+				{ children... }
+			</main>
+			<footer>
+				<div class="giscus"></div>
+			</footer>
+		</body>
+	</html>
+}
